@@ -166,11 +166,20 @@
                   uses = "DeterminateSystems/determinate-nix-action@v3";
                 }
                 {
+                  id = "update";
                   name = "Update flake.lock";
                   uses = "DeterminateSystems/update-flake-lock@main";
                   with_ = {
                     pr-title = "chore: update flake.lock";
                     pr-labels = "dependencies\nautomated";
+                  };
+                }
+                {
+                  name = "Enable automerge";
+                  if_ = "steps.update.outputs.pull-request-number != ''";
+                  run = "gh pr merge --auto --rebase \${{ steps.update.outputs.pull-request-number }}";
+                  env = {
+                    GH_TOKEN = "\${{ secrets.GH_TOKEN_FOR_UPDATES }}";
                   };
                 }
               ];
