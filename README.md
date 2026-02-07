@@ -1,5 +1,7 @@
 # github-actions-nix
 
+[![FlakeHub](https://img.shields.io/endpoint?url=https://flakehub.com/f/synapdeck/github-actions-nix/badge)](https://flakehub.com/flake/synapdeck/github-actions-nix)
+
 Generate GitHub Actions workflows from Nix configuration using a type-safe, declarative approach.
 
 ## Features
@@ -19,7 +21,7 @@ Generate GitHub Actions workflows from Nix configuration using a type-safe, decl
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    github-actions-nix.url = "github:YOUR_USERNAME/github-actions-nix";
+    github-actions-nix.url = "https://flakehub.com/f/synapdeck/github-actions-nix/*";
   };
 }
 ```
