@@ -299,6 +299,9 @@
         else jobDefaults.env
       else job.env;
 
+    # Reusable workflow jobs (with 'uses') don't have runs-on
+    isReusableWorkflow = job.uses != null;
+
     # Apply defaults with job values taking precedence (null means use default)
     withDefaults =
       job
@@ -306,7 +309,9 @@
         if jobDefaults != null
         then {
           runsOn =
-            if job.runsOn != null
+            if isReusableWorkflow
+            then null
+            else if job.runsOn != null
             then job.runsOn
             else if jobDefaults.runsOn != null
             then jobDefaults.runsOn
@@ -330,9 +335,11 @@
             else jobDefaults.continueOnError;
         }
         else {
-          # No defaults, just ensure runsOn has fallback
+          # No defaults, just ensure runsOn has fallback (unless reusable workflow)
           runsOn =
-            if job.runsOn != null
+            if isReusableWorkflow
+            then null
+            else if job.runsOn != null
             then job.runsOn
             else "ubuntu-latest";
         }

@@ -2,8 +2,8 @@
   description = "Generate GitHub Actions workflows from Nix configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
+    flake-parts.url = "https://flakehub.com/f/hercules-ci/flake-parts/0.1";
   };
 
   outputs = inputs @ {flake-parts, ...}:
@@ -12,10 +12,16 @@
 
       imports = [
         inputs.flake-parts.flakeModules.partitions
+        # Dogfood: use our own module for CI
+        ./modules/github-ci.nix
       ];
 
       # Partition development tools to avoid polluting consumers' lockfiles
-      partitionedAttrs.devShells = "dev";
+      partitionedAttrs = {
+        devShells = "dev";
+        apps = "dev";
+        checks = "dev";
+      };
 
       partitions.dev = {
         extraInputsFlake = ./dev;
