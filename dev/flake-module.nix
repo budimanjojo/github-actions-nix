@@ -98,6 +98,46 @@
             };
           };
         };
+
+        update-flake-lock = {
+          name = "Update flake.lock";
+
+          on = {
+            workflowDispatch = {};
+            schedule = [
+              {cron = "0 0 * * 0";} # Weekly on Sunday at midnight
+            ];
+          };
+
+          permissions = {
+            id-token = "write";
+            contents = "write";
+            pull-requests = "write";
+          };
+
+          jobs = {
+            update = {
+              runsOn = "ubuntu-latest";
+
+              steps = [
+                {
+                  uses = "actions/checkout@v4";
+                }
+                {
+                  uses = "DeterminateSystems/determinate-nix-action@v3";
+                }
+                {
+                  name = "Update flake.lock";
+                  uses = "DeterminateSystems/update-flake-lock@main";
+                  with_ = {
+                    pr-title = "chore: update flake.lock";
+                    pr-labels = "dependencies\nautomated";
+                  };
+                }
+              ];
+            };
+          };
+        };
       };
     };
   };
