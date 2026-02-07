@@ -99,6 +99,45 @@
           };
         };
 
+        flake-checker = {
+          name = "Flake Checker";
+
+          on = {
+            pullRequest = {};
+            workflowDispatch = {};
+            push.branches = ["master"];
+          };
+
+          jobs = {
+            check = {
+              runsOn = "ubuntu-latest";
+
+              permissions = {
+                id-token = "write";
+                contents = "read";
+              };
+
+              steps = [
+                {
+                  uses = "actions/checkout@v4";
+                }
+                {
+                  uses = "DeterminateSystems/determinate-nix-action@v3";
+                }
+                {
+                  uses = "DeterminateSystems/flakehub-cache-action@main";
+                }
+                {
+                  uses = "DeterminateSystems/flake-checker-action@main";
+                }
+                {
+                  run = "nix flake check";
+                }
+              ];
+            };
+          };
+        };
+
         update-flake-lock = {
           name = "Update flake.lock";
 
