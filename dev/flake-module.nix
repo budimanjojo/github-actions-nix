@@ -110,7 +110,7 @@
 
           jobs = {
             check = {
-              runsOn = "ubuntu-latest";
+              runsOn = "warp-ubuntu-latest-arm64-2x";
 
               permissions = {
                 id-token = "write";
@@ -156,7 +156,7 @@
 
           jobs = {
             update = {
-              runsOn = "ubuntu-latest";
+              runsOn = "warp-ubuntu-latest-arm64-2x";
 
               steps = [
                 {

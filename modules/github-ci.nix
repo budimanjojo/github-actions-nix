@@ -84,7 +84,7 @@ in {
           lib.mapAttrs' (
             name: workflow:
               lib.nameValuePair "${name}.yml" (
-                pkgs.runCommand "${name}.yml" {
+                pkgs.runCommandLocal "${name}.yml" {
                   nativeBuildInputs = [pkgs.yq-go];
                   json = builtins.toJSON (workflowToYaml workflow);
                   passAsFile = ["json"];
@@ -103,7 +103,7 @@ in {
 
         githubActions.workflowsDir = lib.mkIf cfg.enable (
           # Create a directory with all workflow files
-          pkgs.runCommand "github-workflows" {} ''
+          pkgs.runCommandLocal "github-workflows" {} ''
             mkdir -p $out
             ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: file: ''
                 cp ${file} $out/${name}
